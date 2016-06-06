@@ -4,10 +4,6 @@ library(ggplots2)
 
 baseDir<- "~/Documents/PhDProjects/PD1_Resistance_Signature/Results/ASSIGN/"
 gatherFile
-
-
-
-
 data<-gatherFile(baseDir)
 View(baseDir)
 setwd(baseDir)
@@ -29,21 +25,12 @@ for(i in 1:length(filenames)){
     data<-cbind(data,f)
   }
 }
-row.names(data)
 
-dim(data)
+
 data=data[,-7]
-row.names(GSE78220_Response)
-GSE78220_Response
 data_resp=as.matrix(merge_drop(data,GSE78220_Response))
 
-
-data_resp
-
-responders= subset(data_resp, subset = "R")
-non-responders=
 pdf("~/Documents/PhDProjects/PD1_Resistance_Signature/Results/HeatMaps_ASSIGN_PD1.pdf")
-
 row_R <- HeatmapAnnotation(GSE78220_Response[,"Response",drop=F],
                                 name="EGFR",
                                 col = list(Response = c("R" =  "deeppink","NR" =  "darkolivegreen1")),
@@ -120,15 +107,9 @@ dim(geneListKRADQH) #300
 geneListKRADQH_m_combat=merge(geneListKRADQH,dat, by.x=1, by.y=0)
 dim(geneListKRADQH_m_combat) #288
 
-test_t=
 list(geneListBAD)
 as.matrix(test[,geneListBAD])
 as.matrix(t(test[geneListBAD,]))
-dim(test)
-
-
-
-class(test)
 
 row_RNAseq<- HeatmapAnnotation(GSE78220_Response[,"Response",drop=F],
                                name="Response",
@@ -138,17 +119,10 @@ row_RNAseq<- HeatmapAnnotation(GSE78220_Response[,"Response",drop=F],
                                show_legend = T)
 
 
-
 geneListBAD_m_t=t(geneListBAD_m)
-geneListBAD_m_t
 geneListBAD_m_t_no28=geneListBAD_m_t[-12,]
-
-geneListBAD_m_t
 geneListBAD_m_scaled_no28=scale(geneListBAD_m_t_no28)
 geneListBAD_m_scaled=scale(geneListBAD_m_t)
-
-View(geneListBAD_m_scaled)
-
 
 RNAseq_PD_hm <- Heatmap(as.matrix(geneListBAD_m_scaled_no28), cluster_rows = T,
                   cluster_columns = T, show_row_names = F, show_column_names = F,
