@@ -1,0 +1,52 @@
+---
+title: "Filter_GSE78220"
+author: "Shelley MacNeil"
+date: "June 14, 2016"
+output: html_document
+---
+
+Read in Data
+```{r}
+data <- "~/Documents/PhDProjects/PD1_Resistance_Signature/Data/GSE78220_PatientFPKM_withResponse_Sorted.txt"
+data <-as.matrix(read.table(data,sep='\t',row.names=1,header=1))
+head(data)
+response <- "~/Documents/PhDProjects/PD1_Resistance_Signature/Data/GSE78220_Response.txt"
+response <-as.matrix(read.table(response,sep='\t',row.names=1,header=1))
+dim(response)
+```
+
+Filter Data
+```{r}
+#filter anything with less than 85% variation 
+# take the means of the rows have zeros in them 
+dim(data)  #25268
+data_f <-data[apply(data[,1:28]==0,1,mean) < 0.60,]
+head(data_f) #19495
+```
+
+Log the data (log2)
+```{r}
+data_unlogged_1= (data_f +1)
+data_f_loged=log2(data_unlogged_1)
+View(data_f_loged)
+```
+
+Write filtered logged file 
+```{r}
+write.table(data_f_loged, file = "~/Documents/PhDProjects/PD1_Resistance_Signature/Data/GSE78220_FPKMlog2_Filtered_40", sep='\t',quote=F, col.names = NA, row.names= T)
+```
+
+Seperete into two files based on Response for BinReg
+```{r}
+
+responders <-data_f_loged[,1:15]
+#View(responders)
+nonresponders<-data_f_loged[,16:28]
+#View(nonresponders)
+write.table(responders, "~/Documents/PhDProjects/PD1_Resistance_Signature/Data/GSE78220_FPKMlog2_Responders_filter40.txt", sep='\t',quote=F, col.names = NA, row.names= T)
+write.table(nonresponders, "~/Documents/PhDProjects/PD1_Resistance_Signature/Data/GSE78220_FPKMlog2_NonResponders_filter40.txt", sep='\t',quote=F, col.names = NA, row.names= T)
+
+```
+
+
+
